@@ -9,8 +9,16 @@ import { Sales } from './pages/Sales';
 import { Invoices } from './pages/Invoices';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading } = useAuth();
+  // const { user, loading } = useAuth(); // Lógica de autenticación comentada temporalmente
 
+  // --- INICIO: CAMBIO PROVISIONAL PARA SALTAR PROTECCIÓN DE RUTA ---
+  // Se comenta la lógica de protección para permitir el acceso directo al dashboard.
+  // Para reactivar, descomenta las líneas de arriba y el bloque de abajo, y elimina la siguiente línea.
+  return <>{children}</>;
+  // --- FIN: CAMBIO PROVISIONAL ---
+
+  /*
+  // Lógica de protección original (comentada)
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -20,6 +28,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   }
 
   return user ? <>{children}</> : <Navigate to="/auth" replace />;
+  */
 };
 
 const AppLayout: React.FC = () => {

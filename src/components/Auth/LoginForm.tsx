@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useAuth } from '../../context/AuthContext';
+// import { useAuth } from '../../context/AuthContext'; // Comentado temporalmente
 import { LogIn, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object({
   email: yup
@@ -25,7 +26,8 @@ interface LoginFormProps {
 export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  // const { login } = useAuth(); // Comentado temporalmente
+  const navigate = useNavigate();
 
   const {
     register,
@@ -38,6 +40,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
 
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
+
+    // --- INICIO: CAMBIO PROVISIONAL PARA SALTAR LOGIN ---
+    // Se comenta la lógica de autenticación real.
+    // En su lugar, se redirige directamente al dashboard.
+    // Para reactivar, comenta la línea de abajo y descomenta el bloque 'try/catch'.
+    navigate('/');
+    // --- FIN: CAMBIO PROVISIONAL ---
+
+    /*
+    // Lógica de autenticación original (comentada)
     try {
       await login(data.email, data.password);
     } catch (error: any) {
@@ -47,6 +59,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
     } finally {
       setLoading(false);
     }
+    */
   };
 
   return (

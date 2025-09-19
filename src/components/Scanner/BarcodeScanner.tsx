@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import { Html5QrcodeScanner, Html5QrcodeSupportedFormats, Html5QrcodeScanType } from 'html5-qrcode';
 import { Camera, X } from 'lucide-react';
 
 interface BarcodeScannerProps {
@@ -22,7 +22,8 @@ export const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
       {
         fps: 10,
         qrbox: { width: 300, height: 200 },
-        supportedScanTypes: [
+        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+        formatsToSupport: [
           Html5QrcodeSupportedFormats.EAN_13,
           Html5QrcodeSupportedFormats.EAN_8,
           Html5QrcodeSupportedFormats.CODE_128,
@@ -37,20 +38,24 @@ export const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
 
     const handleScanSuccess = (decodedText: string) => {
       onScan(decodedText);
-      scanner.clear();
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(console.error);
+      }
       setIsScanning(false);
     };
 
     const handleScanError = (error: string) => {
       // Silenciar errores de escaneo continuo
-      console.log('Error de escaneo:', error);
+      // console.log('Error de escaneo:', error);
     };
 
     scanner.render(handleScanSuccess, handleScanError);
     setIsScanning(true);
 
     return () => {
-      scanner.clear().catch(console.error);
+      if (scannerRef.current && scannerRef.current.isScanning) {
+        scannerRef.current.clear().catch(console.error);
+      }
     };
   }, [onScan]);
 
